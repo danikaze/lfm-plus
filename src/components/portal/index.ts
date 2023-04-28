@@ -1,6 +1,6 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { WaitForOptions, waitFor } from '@src/utils/wait-for';
+import { WaitForOptions, waitFor } from '@utils/wait-for';
 
 export type Props = DirectPortal | WaitingPortal;
 

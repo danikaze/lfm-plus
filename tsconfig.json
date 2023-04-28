@@ -18,8 +18,6 @@
       "@components/*": ["src/components/*"],
       "@img": ["src/img"],
       "@img/*": ["src/img/*"],
-      "@src": ["src"],
-      "@src/*": ["src/*"],
       "@themes": ["src/themes"],
       "@themes/*": ["src/themes/*"],
       "@utils": ["src/utils"],

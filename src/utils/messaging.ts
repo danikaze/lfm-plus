@@ -1,4 +1,4 @@
-import { AppMessage } from '@src/app-msgs';
+import { AppMessage } from 'src/app-msgs';
 
 export type AppMessageChannel = keyof AppMessage;
 export type AppMessageHandler = { removeHandler: () => void };
