@@ -1,13 +1,15 @@
 import { createHash } from 'crypto';
 import { sep, join } from 'path';
 import { existsSync, readdirSync } from 'fs';
+import { Configuration, WebpackPluginInstance } from 'webpack';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
 import packageJson from './package.json';
 import { getBuildTimeConstantsPlugins } from './scripts/build-constants';
-import { Configuration, WebpackPluginInstance } from 'webpack';
+
+const CSS_CLASSES_PREFIX = 'lfmp_';
 
 const config: (env: any) => Configuration = (env) => {
   const IS_PRODUCTION = env.production === true;
@@ -18,7 +20,9 @@ const config: (env: any) => Configuration = (env) => {
     devtool: IS_PRODUCTION ? undefined : 'inline-source-map',
 
     entry: {
-      app: ['src/index.tsx'],
+      worker: ['src/entries/worker/index.ts'],
+      ui: ['src/entries/ui/index.tsx'],
+      popup: ['src/entries/popup/index.tsx'],
     },
 
     output: {
@@ -38,7 +42,7 @@ const config: (env: any) => Configuration = (env) => {
               loader: 'css-loader',
               options: {
                 modules: {
-                  getLocalIdent: getCssLocalIdent,
+                  getLocalIdent: getCssLocalIdent(CSS_CLASSES_PREFIX),
                 },
                 sourceMap: true,
                 importLoaders: 1,
@@ -143,24 +147,25 @@ interface CssLoaderContextLike {
 }
 
 /* https://github.com/webpack-contrib/css-loader#modules */
-function getCssLocalIdent(
-  context: CssLoaderContextLike,
-  localIdentName: string,
-  localName: string
-): string {
-  const HASH_LENGTH = 5;
-  const hashContent = `filepath:${context.resourcePath}|classname:${localName}`;
-  const filename = context.resourcePath
-    .replace(`${context.context}`, '')
-    .substring(1)
-    .replace(sep, '-')
-    .replace(/\.module\.s?[ca]ss/, '');
-  const hash = createHash('md5')
-    .update(hashContent)
-    .digest('base64')
-    .substring(0, HASH_LENGTH);
+function getCssLocalIdent(prefix = '') {
+  return (
+    context: CssLoaderContextLike,
+    localIdentName: string,
+    localName: string
+  ): string => {
+    const HASH_LENGTH = 5;
+    const hashContent = `filepath:${context.resourcePath}|classname:${localName}`;
+    const filename = context.resourcePath
+      .replace(`${context.context}`, '')
+      .substring(1)
+      .replace(sep, '-')
+      .replace(/\.module\.s?[ca]ss/, '');
+    const hash = createHash('md5')
+      .update(hashContent)
+      .digest('base64')
+      .substring(0, HASH_LENGTH);
 
-  return `${filename}__${localName}__${hash}`;
+    return `${prefix || ''}${filename}__${localName}__${hash}`;
+  };
 }
-
 export default config;
