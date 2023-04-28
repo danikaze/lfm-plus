@@ -1,0 +1,58 @@
+@use '@components/constants.scss' as constants;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 10px 0;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  font-family: 'Montserrat';
+}
+
+.item {
+  display: flex;
+  cursor: pointer;
+  color: #555;
+  padding: 10px 24px;
+
+  &.disabled {
+    cursor: default;
+  }
+
+  &:not(.disabled):hover {
+    color: #000;
+    background: #fafafa;
+  }
+}
+
+.short {
+  border-radius: 50px;
+  background: rgb(0 0 0 / 5%);
+  margin-left: 20px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: smaller;
+}
+
+.separator {
+  height: 1px;
+  background: #c7c7c7;
+  margin: 5px 10px;
+}
+
+.position {
+  z-index: constants.$zIndexPopupMenu;
+}
+
+.bg {
+  position: fixed;
+  z-index: constants.$zIndexPopupMenuBg;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
