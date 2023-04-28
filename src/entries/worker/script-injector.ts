@@ -1,4 +1,4 @@
-import { msgLog } from '@src/utils/logging';
+import { msgLog } from '@utils/logging';
 
 const NAVIGATION_FILTER: chrome.webNavigation.WebNavigationEventFilter = {
   url: [{ urlMatches: 'https://lowfuelmotorsport.com/*' }],
