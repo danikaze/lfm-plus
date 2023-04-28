@@ -1,26 +1,14 @@
 import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux';
 
 import { msgLog } from '@utils/logging';
-import { addXhrLoadHandler, enableXhrInterceptor } from '@utils/xhr';
 import { LfmPlusUi } from '@components/ui';
+import { store } from '@store';
+
+import { interceptApiData } from './api';
 
 msgLog('UI script executed');
-enableXhrInterceptor();
-
-addXhrLoadHandler(
-  (xhr) => {
-    try {
-      const data = JSON.parse(xhr.body);
-      msgLog('xhr', xhr.url, data);
-    } catch {}
-  },
-  {
-    url: (url) =>
-      // intercept only certain calls to the LFM API
-      url.host === 'api2.lowfuelmotorsport.com' &&
-      url.pathname === '/api/checkBroadcaster',
-  }
-);
+interceptApiData(store.dispatch);
 
 /*
  * Inject the UI
@@ -30,4 +18,9 @@ container.id = 'lfm-plus-root';
 document.body.appendChild(container);
 
 const root = createRoot(container);
-root.render(<LfmPlusUi />);
+const app = (
+  <Provider store={store}>
+    <LfmPlusUi />
+  </Provider>
+);
+root.render(app);
