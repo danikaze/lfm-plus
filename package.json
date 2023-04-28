@@ -1,8 +1,8 @@
 {
   "private": true,
-  "name": "chrome-extension-boilerplate",
-  "version": "0.3.0",
-  "description": "Boilerplate to create Chrome extensions using TypeScript + ReactJS",
+  "name": "lfm-plus",
+  "version": "0.1.0",
+  "description": "UI/UX improvements for Low Fuel Motorsports",
   "scripts": {
     "dev": "webpack --config webpack.config.ts --mode development",
     "build": "scripts/build.sh",
