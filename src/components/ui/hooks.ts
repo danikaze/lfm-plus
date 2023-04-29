@@ -14,7 +14,7 @@ export function useLfmPlusUi() {
   const isTrackDataUpdated = useSelector(isTrackDataUpToDateSelector);
   const currentPage = useSelector(currentPageSelector);
 
-  /** Update the track data automatically when needed */
+  /* Update the track data automatically when needed */
   useEffect(() => {
     if (isTrackDataUpdated) return;
     updateTrackInfo();
@@ -26,19 +26,27 @@ export function useLfmPlusUi() {
   );
 
   return {
+    currentPage,
     topMenuItems,
   };
 }
 
 function getTopMenuItems(page: PageState | undefined): PopupMenuItem[] {
-  if (!page) return [];
-
-  return [
-    {
-      label: page.page,
-      short: 'P',
-      onClick: () => msgLog('current page', page),
-    },
-    { label: 'Item 2', onClick: () => msgLog('Item 2 clicked') },
+  const baseItems: PopupMenuItem[] = [
+    { label: `LFM+ ${PACKAGE_VERSION} is active`, onClick: () => {} },
   ];
+  if (!page) return baseItems;
+
+  const items = [...baseItems];
+
+  if (!IS_PRODUCTION) {
+    items.push('separator');
+    items.push({
+      label: page.page,
+      short: 'Pg',
+      onClick: () => msgLog('currentPage', page),
+    });
+  }
+
+  return items;
 }

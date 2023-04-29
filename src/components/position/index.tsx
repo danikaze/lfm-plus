@@ -29,6 +29,8 @@ export interface PositionRelativeProps extends BaseProps {
   trackChanges?: boolean;
   side: PositionPoint;
   relativeTo: RefObject<HTMLElement>;
+  offsetX?: number;
+  offsetY?: number;
 }
 
 export interface PositionAbsoluteProps extends BaseProps {
