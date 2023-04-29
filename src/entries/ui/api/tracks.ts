@@ -2,7 +2,7 @@ import {
   TransformObjectOptions,
   transformObject,
 } from '@utils/transform-object';
-import { msgError, msgLog } from '@utils/logging';
+import { msgError } from '@utils/logging';
 import { addXhrLoadHandler } from '@utils/xhr';
 import { setDataFromApi } from '@store/features/tracks';
 import { TrackData } from '@store/types';
@@ -14,7 +14,6 @@ export function interceptTrackApiData(dispatch: AppDispatch): void {
       try {
         const apiData = JSON.parse(xhr.body);
         const data = transformApiData(apiData);
-        msgLog(data);
         dispatch(setDataFromApi(data));
       } catch (e) {
         msgError(e);

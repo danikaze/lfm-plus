@@ -6,9 +6,11 @@ import { LfmPlusUi } from '@components/ui';
 import { store } from '@store';
 
 import { interceptApiData } from './api';
+import { trackUrlChanges } from './url';
 
 msgLog('UI script executed');
 interceptApiData(store.dispatch);
+trackUrlChanges(store.dispatch);
 
 /*
  * Inject the UI

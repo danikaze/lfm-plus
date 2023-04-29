@@ -1,3 +1,5 @@
+import { msgLog } from './logging';
+
 export type XhrLoadData = {
   method: string;
   url: URL;
@@ -45,6 +47,8 @@ export function removeXhrLoadHandler(handler: XhrLoadHandler): void {
 }
 
 function handleXhrLoad(data: XhrLoadData): void {
+  msgLog('XHR intercepted', data.url.pathname, data);
+
   for (const { handler, filter } of xhrLoadHandlers) {
     if (filter.url && !filter.url(data.url)) continue;
     handler(data);
