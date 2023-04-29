@@ -2,6 +2,8 @@ import { RootState } from '@store';
 import { TRACK_RECORD_TTL } from '@utils/constants';
 import { TrackData } from './types';
 
+export const currentPageSelector = (state: RootState) => state.page;
+
 export const tracksSelector = (state: RootState) => state.tracks;
 
 export const isTrackDataUpToDateSelector = (state: RootState) => {
