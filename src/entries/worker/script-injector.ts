@@ -10,8 +10,8 @@ const NAVIGATION_FILTER: chrome.webNavigation.WebNavigationEventFilter = {
  * multiple tabs can be opened, etc.
  */
 export function setupScriptInjector(): void {
-  chrome.webNavigation.onCommitted.addListener((data) => {
-    msgLog('webNavigation.committed', data);
+  chrome.webNavigation.onCompleted.addListener((data) => {
+    msgLog('webNavigation.onCompleted', data);
     chrome.scripting.executeScript({
       injectImmediately: true,
       target: { tabId: data.tabId },

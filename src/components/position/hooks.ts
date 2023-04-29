@@ -133,6 +133,11 @@ export function usePosition(props: Props) {
       }
     }
 
+    if (relativeProps) {
+      top += props.offsetY || 0;
+      left += props.offsetX || 0;
+    }
+
     return {
       top,
       left,

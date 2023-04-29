@@ -38,7 +38,7 @@ export const PopupMenu: FC<Props> = (props) => {
     <Portal>
       {bg}
       <Position {...positionOptions}>
-        <div className={clsx(styles.root, props.className)}>{options}</div>;
+        <div className={clsx(styles.root, props.className)}>{options}</div>
       </Position>
     </Portal>
   );

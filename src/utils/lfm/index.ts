@@ -3,6 +3,11 @@ export enum SimId {
   RF2 = 2,
 }
 
+export const SimNames: Record<SimId, string> = {
+  [SimId.ACC]: 'Assetto Corsa Competizione',
+  [SimId.RF2]: 'rFactor 2',
+};
+
 export const enum NonBaseContent {
   BASE = 0,
   DLC = 1,

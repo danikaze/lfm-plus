@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { clsx } from 'clsx';
 
 import { PopupMenu, Props as PopupMenuProps } from '@components/popup-menu';
 import { PositionRelativeProps } from '@components/position';
@@ -22,8 +23,10 @@ export const TopBarButton: FC<Props> = ({ items }) => {
     <PopupMenu items={items} position={position} onClose={toggleMenu} />
   );
 
+  const classes = clsx(styles.root, items.length === 0 && styles.disabled);
+
   return (
-    <div className={styles.root} onClick={toggleMenu} ref={ref}>
+    <div className={classes} onClick={toggleMenu} ref={ref}>
       <div className={styles.text}>LFM</div>
       <div className={styles.plus}>+</div>
       <div className={styles.arrow} />
