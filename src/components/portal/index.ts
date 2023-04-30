@@ -1,42 +1,31 @@
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { FC, ReactNode, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { WaitForOptions, waitFor } from '@utils/wait-for';
 
-export type Props = DirectPortal | WaitingPortal;
-
-export interface DirectPortal {
+export type Props = {
+  children: ReactNode;
   container?: HTMLElement;
-  children: ReactNode;
-}
-
-export interface WaitingPortal {
-  waitForContainer: () => HTMLElement | null;
-  waitForOptions?: Omit<WaitForOptions<null>, 'failValue'>;
-  children: ReactNode;
-}
-
-export const Portal: FC<Props> = (props) => {
-  const [container, setContainer] = useState<HTMLElement | null>(
-    isWaitingPortal(props)
-      ? props.waitForContainer()
-      : props.container || document.body
-  );
-
-  useEffect(() => {
-    if (container || !isWaitingPortal(props)) return;
-    const options = { ...props.waitForOptions, failValue: null };
-    waitFor<HTMLElement, null>(props.waitForContainer, options)
-      .then((elem) => setContainer(elem))
-      .catch(() => {});
-  }, [
-    (props as DirectPortal).container,
-    (props as WaitingPortal).waitForContainer,
-  ]);
-
-  if (!container) return null;
-  return createPortal(props.children, container || document.body);
+  createWrapper?: (
+    container: HTMLElement,
+    wrapper?: HTMLElement
+  ) => HTMLElement;
 };
 
-function isWaitingPortal(props: Props): props is WaitingPortal {
-  return (props as WaitingPortal).waitForContainer !== undefined;
+export const Portal: FC<Props> = ({ children, container, createWrapper }) => {
+  const wrapperRef = useRef<HTMLElement>();
+  wrapperRef.current = handleWrapper(
+    container || document.body,
+    createWrapper,
+    wrapperRef.current
+  );
+
+  return createPortal(children, wrapperRef.current);
+};
+
+function handleWrapper(
+  container: HTMLElement,
+  createWrapper: Props['createWrapper'],
+  wrapper: HTMLElement | undefined
+): HTMLElement {
+  if (!createWrapper) return container;
+  return createWrapper(container, wrapper);
 }

@@ -8,6 +8,7 @@ import { Portal } from '@components/portal';
 import styles from './track-records-clock.module.scss';
 import { Times, useTrackRecordsClock } from './hooks';
 import { Position } from '@components/position';
+import { getPctgColor } from '@utils/get-pctg-color';
 
 export interface Props {
   track: TrackData;
@@ -19,6 +20,11 @@ interface TableProps {
   label: string;
   times: Times[];
 }
+
+const offset: Record<Props['style'], Record<'offsetX' | 'offsetY', number>> = {
+  trackRecords: { offsetX: -32, offsetY: -29 },
+  profileBests: { offsetX: -27, offsetY: -26 },
+};
 
 export const TrackRecordsClock: FC<Props> = (props) => {
   const { clockRef, label, times, isTableVisible, showTable, hideTable } =
@@ -34,8 +40,7 @@ export const TrackRecordsClock: FC<Props> = (props) => {
             anchor="nw"
             side="se"
             className={styles.timeTablePosition}
-            offsetX={-32}
-            offsetY={-29}
+            {...offset[props.style]}
           >
             <TrackRecordsTable label={label} times={times} />
           </Position>
@@ -61,7 +66,7 @@ export const TrackRecordsClock: FC<Props> = (props) => {
 
 const TrackRecordsTable: FC<TableProps> = ({ label, times }) => {
   const rows = times.map(({ pctg, quali, race }) => (
-    <tr key={pctg} className={styles[`pctg-${pctg}`]}>
+    <tr key={pctg} style={{ borderColor: getPctgColor(pctg + 0.1) }}>
       <th>{pctg}%</th>
       <td>{quali}</td>
       <td>{race}</td>

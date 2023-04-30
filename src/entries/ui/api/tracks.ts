@@ -5,7 +5,7 @@ import {
 import { msgError } from '@utils/logging';
 import { addXhrLoadHandler } from '@utils/xhr';
 import { setDataFromApi } from '@store/features/tracks';
-import { TrackData } from '@store/types';
+import { TrackDataWithRecords } from '@store/types';
 import { AppDispatch } from '@store';
 
 export function interceptTrackApiData(dispatch: AppDispatch): void {
@@ -26,9 +26,9 @@ export function interceptTrackApiData(dispatch: AppDispatch): void {
   );
 }
 
-function transformApiData(apiData: any[]): TrackData[] {
+function transformApiData(apiData: any[]): TrackDataWithRecords[] {
   return apiData.map(
-    (item) => transformObject(item, convertOptions) as TrackData
+    (item) => transformObject(item, convertOptions) as TrackDataWithRecords
   );
 }
 

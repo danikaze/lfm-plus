@@ -3,7 +3,7 @@ import { useTrackRecordsPage } from './hooks';
 import { TrackRecordsClock } from '@components/track-records-clock';
 import { Portal } from '@components/portal';
 
-export const TrackRecords: FC = () => {
+export const TrackRecordsPage: FC = () => {
   const { trackElems } = useTrackRecordsPage();
 
   const elems = trackElems.map(({ elem, track, carClass }) => (
