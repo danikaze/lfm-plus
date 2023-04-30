@@ -27,3 +27,6 @@ export const getTrackSelector =
         track.trackId === trackId &&
         track.trackYear === trackYear
     );
+
+export const userTrackRecordsSelector = (state: RootState) =>
+  state.userTrackRecords;

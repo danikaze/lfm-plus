@@ -63,9 +63,14 @@ export interface TrackData {
   contentLinkName: string | null;
   /** Unknown */
   simSettings: string;
+}
 
-  /** Records */
-  records?: Partial<Record<CarClass, TrackRecord>>;
+export interface TrackDataWithRecords extends TrackData {
+  records: Partial<Record<CarClass, TrackRecord>>;
+}
+
+export interface TrackDataWithClassRecords extends TrackData {
+  records: TrackRecord;
 }
 
 export interface TrackRecord {

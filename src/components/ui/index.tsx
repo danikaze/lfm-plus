@@ -1,6 +1,6 @@
 import { FC, useCallback, useMemo } from 'react';
 
-import { Portal } from '@components/portal';
+import { WaitingPortal } from '@components/portal/waiting-portal';
 import { TopBarButton } from '@components/top-bar-button';
 import { useLfmPlusUi } from './hooks';
 import { LfmPlusPage } from './pages';
@@ -22,12 +22,12 @@ export const LfmPlusUi: FC = () => {
 
   return (
     <>
-      <Portal
+      <WaitingPortal
         waitForContainer={waitForContainer}
         waitForOptions={waitForOptions}
       >
         <TopBarButton items={topMenuItems} />
-      </Portal>
+      </WaitingPortal>
       <LfmPlusPage currentPage={currentPage} />
     </>
   );

@@ -27,7 +27,7 @@ export interface MyAccountPage {
 }
 
 export interface UserProfilePage {
-  page: 'user';
+  page: 'profile';
   userId: number;
 }
 
@@ -88,7 +88,7 @@ function parseUrl(url: URL): PageState | undefined {
   const profileMatch = /\/profile\/(\d+)/.exec(url.pathname);
   if (profileMatch) {
     const userId = Number(profileMatch[1]);
-    return { page: 'user', userId };
+    return { page: 'profile', userId };
   }
 
   const raceResultMatch = /\/events\/(\d+)\/race\/(\d+)/.exec(url.pathname);

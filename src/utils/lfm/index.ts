@@ -13,7 +13,7 @@ export const enum NonBaseContent {
   DLC = 1,
 }
 
-export const enum CarClass {
+export enum CarClass {
   CHL = 'CHL',
   CUP = 'CUP',
   GT3 = 'GT3',

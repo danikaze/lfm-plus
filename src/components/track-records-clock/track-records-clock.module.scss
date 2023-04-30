@@ -2,7 +2,15 @@
 
 .root {
   display: inline-block;
-  margin-left: 10px;
+  cursor: pointer;
+
+  &.trackRecords {
+    margin-left: 10px;
+  }
+
+  &.profileBests {
+    margin-right: 5px;
+  }
 }
 
 .timeTablePosition {
@@ -38,33 +46,5 @@
   tbody tr {
     border-left: 3px solid;
     border-bottom: 1px solid;
-  }
-
-  .pctg-100 {
-    border-color: #c200cf;
-  }
-  .pctg-101 {
-    border-color: #2b93ff;
-  }
-  .pctg-102 {
-    border-color: #00cf36;
-  }
-  .pctg-103 {
-    border-color: #ffe27a;
-  }
-  .pctg-104 {
-    border-color: #ffb13b;
-  }
-  .pctg-105 {
-    border-color: #ff3b3b;
-  }
-  .pctg-106 {
-    border-color: #c36832;
-  }
-  .pctg-107 {
-    border-color: #602f12;
-  }
-  .pctg-108 {
-    border-color: #222222;
   }
 }
