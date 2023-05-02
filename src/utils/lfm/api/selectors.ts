@@ -1,6 +1,19 @@
 import { QualiResult, Race, RaceResult, User } from '@store/types';
 import { CarClass } from '..';
 
+/**
+ * Finds the split (index, from 0) of the specified userId
+ */
+export function getOwnUserSplitFromRaceData(
+  race: Race | undefined,
+  userId: User['id'] | undefined
+): number | undefined {
+  if (!race || !userId) return;
+  return race.qualiResultsSplits.findIndex((result) =>
+    findQualiResult(result, userId)
+  );
+}
+
 export function getQualiResultFromRaceData(
   race: Race | undefined,
   userId: User['id'] | undefined,

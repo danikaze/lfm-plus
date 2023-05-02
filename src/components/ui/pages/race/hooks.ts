@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { useRaceSelector } from '@store/selectors';
+import {
+  settingsSelector,
+  useRaceSelector,
+  userSelector,
+} from '@store/selectors';
 import { Race, TrackDataWithRecords, User } from '@store/types';
 import { CarClass } from '@utils/lfm';
 import { timeToMs } from '@utils/time';
@@ -11,16 +15,17 @@ import {
   RaceResultsColumns,
 } from '@utils/lfm/table-constants';
 import {
+  getOwnUserSplitFromRaceData,
   getQualiResultFromRaceData,
   getRaceResultFromRaceData,
 } from '@utils/lfm/api/selectors';
-
 import { POLL_INTERVAL_MS } from '@utils/constants';
 
 import { Props } from '.';
 
 interface SplitData {
-  split: number;
+  selectedSplit: number;
+  ownSplitElem?: HTMLDivElement;
   sor?: number;
   rows: RowData[];
   carClasses: CarClassData[];
@@ -45,12 +50,18 @@ interface CarClassData {
 type TabType = 'quali' | 'race' | 'entrylist' | 'other';
 
 export function useRacePage({ raceId }: Props) {
+  const settings = useSelector(settingsSelector);
+  const user = useSelector(userSelector);
   const [currentTab, setCurrentTab] = useState<TabType | undefined>();
   const [currentSplit, setCurrentSplit] = useState<number | undefined>();
   const [currentSplitData, setCurrentSplitData] = useState<
     SplitData | undefined
   >();
   const race = useSelector(useRaceSelector(raceId));
+  const ownSplitIndex = useMemo(() => {
+    if (!race || !user) return;
+    return getOwnUserSplitFromRaceData(race, user.id);
+  }, [race, user]);
   const simId = useMemo(() => race?.qualiResults[0]?.simId, [race]);
   const trackFilter = useMemo(
     () => simId && race && { simId, trackId: race?.track.trackId },
@@ -61,9 +72,10 @@ export function useRacePage({ raceId }: Props) {
   const updateSplitData = useCallback(
     () =>
       setCurrentSplitData(
-        (currentData) => getSplitData(trackRecords, race) ?? currentData
+        (currentData) =>
+          getSplitData(trackRecords, race, ownSplitIndex) ?? currentData
       ),
-    [trackRecords, race]
+    [trackRecords, race, ownSplitIndex]
   );
 
   useEffect(() => {
@@ -93,9 +105,15 @@ export function useRacePage({ raceId }: Props) {
   /**
    * Update rendered information on Store change
    */
-  useEffect(updateSplitData, [trackRecords, race, currentTab, currentSplit]);
+  useEffect(updateSplitData, [
+    trackRecords,
+    race,
+    currentTab,
+    currentSplit,
+    ownSplitIndex,
+  ]);
 
-  return { currentSplitData, trackRecords };
+  return { settings, currentSplitData, trackRecords };
 }
 
 function getSplit(): number | undefined {
@@ -109,7 +127,8 @@ function getSplit(): number | undefined {
 
 function getSplitData(
   trackRecords: TrackDataWithRecords | undefined,
-  race: Race | undefined
+  race: Race | undefined,
+  ownSplitIndex: number | undefined
 ): SplitData | undefined {
   if (!trackRecords || !race) return;
 
@@ -130,11 +149,25 @@ function getSplitData(
       : getEntryRowsData();
 
   return {
-    split,
+    selectedSplit: split,
     rows,
     sor: getSplitSoF(race, split),
     carClasses: getCarClasses(),
+    ownSplitElem: getOwnSplitTab(race, ownSplitIndex),
   };
+}
+
+function getOwnSplitTab(
+  race: Race | undefined,
+  ownSplitIndex: number | undefined
+): HTMLDivElement | undefined {
+  if (!race || ownSplitIndex === undefined) return;
+
+  return document
+    .querySelector('mat-tab-body mat-tab-header')
+    ?.querySelectorAll('.mat-tab-label-content')[
+    ownSplitIndex
+  ] as HTMLDivElement;
 }
 
 function getCarClasses(): CarClassData[] {

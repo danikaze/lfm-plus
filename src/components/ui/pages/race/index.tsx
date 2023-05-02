@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 
 import { Portal } from '@components/portal';
 import { TimePctgIcon } from '@components/time-pctg-icon';
@@ -12,7 +12,15 @@ export interface Props {
 }
 
 export const RacePage: FC<Props> = (props) => {
-  const { currentSplitData, trackRecords } = useRacePage(props);
+  const { settings, currentSplitData, trackRecords } = useRacePage(props);
+
+  useEffect(() => {
+    if (!currentSplitData?.ownSplitElem) return;
+    currentSplitData.ownSplitElem.style.setProperty(
+      'color',
+      settings.ownSplitColor
+    );
+  }, [settings, currentSplitData?.ownSplitElem]);
 
   const elems = useMemo(() => {
     if (!currentSplitData) return;

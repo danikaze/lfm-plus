@@ -1,8 +1,12 @@
+import { useCallback } from 'react';
 import { RootState } from '@store';
 import { TRACK_RECORD_TTL } from '@utils/constants';
 import { FindTrackFilter, findTrack } from '@utils/lfm/find-track';
 import { Race } from './types';
-import { useCallback } from 'react';
+
+export const userSelector = (state: RootState) => state.user.data;
+
+export const settingsSelector = (state: RootState) => state.settings;
 
 export const currentPageSelector = (state: RootState) => state.page;
 
