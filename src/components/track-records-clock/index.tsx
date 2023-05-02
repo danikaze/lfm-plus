@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react';
 import { clsx } from 'clsx';
 
-import { TrackData } from '@store/types';
+import { TrackDataWithRecords } from '@store/types';
 import { CarClass } from '@utils/lfm';
 import { Portal } from '@components/portal';
 
@@ -11,9 +11,9 @@ import { Position } from '@components/position';
 import { getPctgColor } from '@utils/get-pctg-color';
 
 export interface Props {
-  track: TrackData;
+  track: TrackDataWithRecords;
   carClass: CarClass;
-  style: 'trackRecords' | 'profileBests';
+  style: 'trackRecords' | 'profileBests' | 'raceResultClass';
 }
 
 interface TableProps {
@@ -24,6 +24,7 @@ interface TableProps {
 const offset: Record<Props['style'], Record<'offsetX' | 'offsetY', number>> = {
   trackRecords: { offsetX: -32, offsetY: -29 },
   profileBests: { offsetX: -27, offsetY: -26 },
+  raceResultClass: { offsetX: -28, offsetY: -27 },
 };
 
 export const TrackRecordsClock: FC<Props> = (props) => {
