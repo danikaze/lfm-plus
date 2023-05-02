@@ -16,7 +16,6 @@ import {
 } from '@utils/lfm/api/selectors';
 
 import { POLL_INTERVAL_MS } from '@utils/constants';
-import { msgLog } from '@utils/logging';
 
 import { Props } from '.';
 
@@ -24,6 +23,7 @@ interface SplitData {
   split: number;
   sor?: number;
   rows: RowData[];
+  carClasses: CarClassData[];
 }
 
 interface RowData {
@@ -35,6 +35,11 @@ interface RowData {
     elem: HTMLTableCellElement;
     pctg: number;
   };
+}
+
+interface CarClassData {
+  elem: HTMLDivElement;
+  carClass: CarClass;
 }
 
 type TabType = 'quali' | 'race' | 'entrylist' | 'other';
@@ -55,10 +60,9 @@ export function useRacePage({ raceId }: Props) {
 
   const updateSplitData = useCallback(
     () =>
-      setCurrentSplitData((currentData) => {
-        msgLog('setCurrentSplitData');
-        return getSplitData(trackRecords, race) ?? currentData;
-      }),
+      setCurrentSplitData(
+        (currentData) => getSplitData(trackRecords, race) ?? currentData
+      ),
     [trackRecords, race]
   );
 
@@ -91,7 +95,7 @@ export function useRacePage({ raceId }: Props) {
    */
   useEffect(updateSplitData, [trackRecords, race, currentTab, currentSplit]);
 
-  return { currentSplitData };
+  return { currentSplitData, trackRecords };
 }
 
 function getSplit(): number | undefined {
@@ -129,7 +133,25 @@ function getSplitData(
     split,
     rows,
     sor: getSplitSoF(race, split),
+    carClasses: getCarClasses(),
   };
+}
+
+function getCarClasses(): CarClassData[] {
+  return Array.from(
+    document.querySelectorAll('.mat-tab-list .mat-tab-label-content')
+  ).reduce((res, div) => {
+    const carClass = Object.values(CarClass).find((carClass) =>
+      div.textContent?.toLowerCase().startsWith(carClass.toLowerCase())
+    );
+    if (carClass) {
+      res.push({
+        elem: div as HTMLDivElement,
+        carClass,
+      });
+    }
+    return res;
+  }, [] as CarClassData[]);
 }
 
 function getQualiRowsData(
