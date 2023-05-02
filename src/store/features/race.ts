@@ -11,7 +11,7 @@ const initialState: RacesState = {
 };
 
 export const racesSlice = createSlice({
-  name: 'racesState',
+  name: 'races',
   initialState,
   reducers: {
     setDataFromApi: (state, action: PayloadAction<Race>) => {

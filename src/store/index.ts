@@ -4,9 +4,13 @@ import { tracksReducer } from './features/tracks';
 import { pageReducer } from './features/page';
 import { userTrackRecordsReducer } from './features/user-track-records';
 import { racesReducer } from './features/race';
+import { settingsReducer } from './features/settings';
+import { userReducer } from './features/user';
 
 export const store = configureStore({
   reducer: {
+    settings: settingsReducer,
+    user: userReducer,
     page: pageReducer,
     tracks: tracksReducer,
     userTrackRecords: userTrackRecordsReducer,
