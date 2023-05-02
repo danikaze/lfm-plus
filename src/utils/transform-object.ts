@@ -33,18 +33,20 @@ export function transformObject<T extends Record<string, any>>(
   return transform(obj, internalOptions);
 }
 
-function transform<T extends Record<string, any>>(
-  obj: T,
-  options: InternalOptions
-) {
+function transform(obj: any, options: InternalOptions): any {
+  if (typeof obj !== 'object') return obj;
   const { keyConversor, valueConversor, keyDrop } = options;
+
+  if (Array.isArray(obj)) {
+    return obj.map((item) => transform(item, options));
+  }
 
   return Object.entries(obj).reduce((convertedObj, [oldKey, oldValue]) => {
     if (keyDrop?.includes(oldKey)) return transformObject;
 
     const newKey = keyConversor ? keyConversor(oldKey) : oldKey;
     const newValue =
-      oldValue && typeof oldValue === 'object' && !Array.isArray(oldValue)
+      oldValue && typeof oldValue === 'object'
         ? transform(oldValue, options)
         : valueConversor
         ? valueConversor(oldKey, oldValue)

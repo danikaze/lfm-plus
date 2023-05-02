@@ -1,0 +1,27 @@
+export const enum QualiResultsColumns {
+  POSITION = 0,
+  ORIGIN_FLAG = 1,
+  DRIVER_NAME = 2,
+  CAR_NUMBER = 3,
+  CAR_MODEL = 4,
+  BEST_LAP = 5,
+  N_LAPS = 6,
+  S1 = 8,
+  S2 = 9,
+  S3 = 10,
+  GAP = 11,
+}
+export const enum RaceResultsColumns {
+  POSITION = 0,
+  ORIGIN_FLAG = 1,
+  DRIVER_NAME = 2,
+  CAR_NUMBER = 3,
+  CAR_MODEL = 4,
+  BEST_LAP = 5,
+  N_LAPS = 6,
+  RACE_TIME = 7,
+  GAP = 8,
+  POS_GAIN = 9,
+  POINTS = 10,
+  LAPTIMES_BUTTON = 11,
+}

@@ -1,4 +1,10 @@
-export type CaseType = 'pascal' | 'snake' | 'uc' | 'kebab' | 'camel';
+export type CaseType =
+  | 'pascal'
+  | 'snake'
+  | 'uc'
+  | 'kebab'
+  | 'camel'
+  | 'camelAsIs';
 
 type TokenJoiner = (tokens: string[]) => string;
 type Tokenizer = (text: string) => string[];
@@ -11,6 +17,7 @@ type Tokenizer = (text: string) => string[];
  * - `uc`: UPPER_CASE
  * - `kebab`: kebab-case
  * - `camel`: camelCase
+ * - `camelAsIs`: camelCase (but doesn't lowercase if already cameled)
  */
 export function convertCase(
   text: string | undefined,
@@ -33,6 +40,7 @@ const splitter: Record<CaseType, Tokenizer> = {
   uc: tokenizer(/_/, false),
   kebab: tokenizer(/-/, false),
   camel: tokenizer(/[A-Z]/, true),
+  camelAsIs: tokenizer(/[A-Z]/, true),
 };
 
 const joiner: Record<CaseType, TokenJoiner> = {
@@ -44,6 +52,8 @@ const joiner: Record<CaseType, TokenJoiner> = {
     tokens
       .map((tok, i) => (i === 0 ? tok.toLowerCase() : capitalize(tok)))
       .join(''),
+  camelAsIs: (tokens) =>
+    tokens.map((tok, i) => (i === 0 ? tok : capitalize(tok))).join(''),
 };
 
 const validators: Record<CaseType, (text: string) => boolean> = {
@@ -52,6 +62,7 @@ const validators: Record<CaseType, (text: string) => boolean> = {
   uc: (text) => /^[A-Z][A-Z0-9_]*$/.test(text),
   kebab: (text) => /^[a-z][a-z0-9\-]*$/.test(text),
   camel: (text) => /^[a-z][A-Za-z0-9]*$/.test(text),
+  camelAsIs: (text) => /^[a-z][A-Za-z0-9]*$/.test(text),
 };
 
 function capitalize(text: string): string {

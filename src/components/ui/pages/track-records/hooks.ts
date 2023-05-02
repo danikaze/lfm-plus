@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { throttle } from 'throttle-debounce';
 
 import { tracksSelector } from '@store/selectors';
-import { TrackData } from '@store/types';
+import { TrackData, TrackDataWithRecords } from '@store/types';
 import { CarClass, SimId, SimNames } from '@utils/lfm';
 import { waitFor } from '@utils/wait-for';
 import { MUTATION_OBSERVER_THROTTLE, POLL_INTERVAL_MS } from '@utils/constants';
@@ -66,7 +66,7 @@ export function useTrackRecordsPage() {
 }
 
 function selectTrackElems(
-  tracks: TrackData[] | undefined
+  tracks: TrackDataWithRecords[] | undefined
 ): TrackElems[] | undefined {
   if (!tracks || !tracks.length) return;
 

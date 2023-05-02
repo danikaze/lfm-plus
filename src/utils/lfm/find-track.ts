@@ -1,6 +1,6 @@
 import { TrackData } from '@store/types';
 
-interface FindTrackFilter {
+export interface FindTrackFilter {
   simId?: TrackData['simId'];
   trackId?: TrackData['trackId'];
   trackYear?: TrackData['trackYear'];
