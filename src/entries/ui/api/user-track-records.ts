@@ -43,5 +43,5 @@ function transformApiData(apiData: any[]): TrackDataWithClassRecords[] {
 
 const convertOptions: TransformObjectOptions = {
   // transform the rest from snake_case to camelCase
-  keyCase: { from: 'snake', to: 'camel' },
+  keyCase: { from: 'snake', to: 'camelAsIs' },
 };

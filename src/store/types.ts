@@ -177,12 +177,21 @@ export interface Race {
   track: Omit<TrackData, 'records'>;
   raceDate: DateTimeAsString;
   logfile: string;
-  // serverSettings:
   closed: 1;
   seasonWeek: 4;
   sessionRunning: BooleanAsNumber;
-  /** Strength of Field */
+  /** Strength of Fields */
   sof: number;
+  split1Sof: number;
+  split2Sof: number;
+  split3Sof: number;
+  split4Sof: number;
+  split5Sof: number;
+  split6Sof: number;
+  split7Sof: number;
+  split8Sof: number;
+  split9Sof: number;
+  split10Sof: number;
 
   /** List of cars, and their drivers */
   entrylist: {
@@ -220,6 +229,81 @@ export interface Race {
 
   raceResultsSplits: Record<CarClass, Record<'OVERALL', RaceResult[]>>[];
   qualiResultsSplits: QualiResult[][];
+
+  serverSettings: RaceServerSettings;
+}
+
+export interface RaceServerSettings {
+  serverSettings: {
+    assistRules: {
+      file: string;
+    };
+    event: {
+      file: string;
+      data: {
+        track: string;
+        preRaceWaitingTimeSeconds: number;
+        postRaceSeconds: number;
+        sessionOverTimeSeconds: number;
+        ambientTemp: number;
+        cloudLevel: number;
+        rain: number;
+        weatherRandomness: number;
+        simracerWeatherConditions: number;
+        isFixedConditionQualification: BooleanAsNumber;
+        sessions: RaceSessionConfig[];
+        configVersion: number;
+      };
+    };
+    eventRules: {
+      file: string;
+      data: {
+        qualifyStandingType: number;
+        pitWindowLengthSec: number;
+        driverStintTimeSec: number;
+        mandatoryPitstopCount: number;
+        maxTotalDrivingTime: number;
+        maxDriversCount: number;
+        tyreSetCount: number;
+        isRefuellingAllowedInRace: boolean;
+        isRefuellingTimeFixed: boolean;
+        isMandatoryPitstopRefuellingRequired: boolean;
+        isMandatoryPitstopTyreChangeRequired: boolean;
+        isMandatoryPitstopSwapDriverRequired: boolean;
+      };
+    };
+    settings: {
+      file: string;
+      data: {
+        serverName: string;
+        password: string;
+        spectatorPassword: string;
+        centralEntryListPath: string;
+        carGroup: CarClass;
+        trackMedalsRequirement: number;
+        safetyRatingRequirement: number;
+        racecraftRatingRequirement: number;
+        maxCarSlots: number;
+        isRaceLocked: BooleanAsNumber;
+        isLockedPrepPhase: BooleanAsNumber;
+        shortFormationLap: BooleanAsNumber;
+        dumpLeaderboards: BooleanAsNumber;
+        dumpEntryList: BooleanAsNumber;
+        randomizeTrackWhenEmpty: BooleanAsNumber;
+        allowAutoDQ: BooleanAsNumber;
+        formationLapType: number;
+        configVersion: number;
+      };
+    };
+  };
+}
+
+export interface RaceSessionConfig {
+  hourOfDay: number;
+  dayOfWeekend: number;
+  timeMultiplier: number;
+  sessionType: RaceSessionType;
+  sessionDurationMinutes: number;
 }
 
 export interface RaceEventData {

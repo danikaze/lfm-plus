@@ -1,6 +1,8 @@
 import { RootState } from '@store';
 import { TRACK_RECORD_TTL } from '@utils/constants';
-import { TrackData } from './types';
+import { FindTrackFilter, findTrack } from '@utils/lfm/find-track';
+import { Race } from './types';
+import { useCallback } from 'react';
 
 export const currentPageSelector = (state: RootState) => state.page;
 
@@ -14,19 +16,15 @@ export const isTrackDataUpToDateSelector = (state: RootState) => {
   return now - updated.getTime() < TRACK_RECORD_TTL;
 };
 
-export const getTrackSelector =
-  (
-    simId: TrackData['simId'],
-    trackId: TrackData['trackId'],
-    trackYear: TrackData['trackYear']
-  ) =>
-  (state: RootState) =>
-    state.tracks.data.find(
-      (track) =>
-        track.simId === simId &&
-        track.trackId === trackId &&
-        track.trackYear === trackYear
-    );
+export const useTrackSelector = (filter: FindTrackFilter | undefined) =>
+  useCallback(
+    (state: RootState) =>
+      filter ? findTrack(state.tracks.data, filter) : undefined,
+    [filter]
+  );
 
 export const userTrackRecordsSelector = (state: RootState) =>
   state.userTrackRecords;
+
+export const useRaceSelector = (raceId: Race['raceId']) =>
+  useCallback((state: RootState) => state.races.data[raceId], [raceId]);
