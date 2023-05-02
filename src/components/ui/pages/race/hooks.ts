@@ -11,9 +11,12 @@ import { CarClass } from '@utils/lfm';
 import { timeToMs } from '@utils/time';
 import { useTrackSelector } from '@store/selectors';
 import {
-  QualiResultsColumns,
-  RaceResultsColumns,
-} from '@utils/lfm/table-constants';
+  LfmResultRow,
+  ResultRowOrigin,
+  createResultRow,
+  isEntrylistResultRow,
+  isQualiResultRow,
+} from '@utils/lfm/results-row';
 import {
   getOwnUserSplitFromRaceData,
   getQualiResultFromRaceData,
@@ -26,6 +29,7 @@ import { Props } from '.';
 interface SplitData {
   selectedSplit: number;
   ownSplitElem?: HTMLDivElement;
+  ownNameElem?: HTMLAnchorElement;
   sor?: number;
   rows: RowData[];
   carClasses: CarClassData[];
@@ -47,7 +51,7 @@ interface CarClassData {
   carClass: CarClass;
 }
 
-type TabType = 'quali' | 'race' | 'entrylist' | 'other';
+type TabType = ResultRowOrigin;
 
 export function useRacePage({ raceId }: Props) {
   const settings = useSelector(settingsSelector);
@@ -73,13 +77,13 @@ export function useRacePage({ raceId }: Props) {
     () =>
       setCurrentSplitData(
         (currentData) =>
-          getSplitData(trackRecords, race, ownSplitIndex) ?? currentData
+          getSplitData(trackRecords, race, ownSplitIndex, user) ?? currentData
       ),
-    [trackRecords, race, ownSplitIndex]
+    [trackRecords, race, ownSplitIndex, user]
   );
 
   useEffect(() => {
-    let lastTab: TabType;
+    let lastTab: TabType | undefined;
     const interval = setInterval(() => {
       const newTab = getTabType();
       if (lastTab === newTab) return;
@@ -128,7 +132,8 @@ function getSplit(): number | undefined {
 function getSplitData(
   trackRecords: TrackDataWithRecords | undefined,
   race: Race | undefined,
-  ownSplitIndex: number | undefined
+  ownSplitIndex: number | undefined,
+  user: User | undefined
 ): SplitData | undefined {
   if (!trackRecords || !race) return;
 
@@ -139,21 +144,15 @@ function getSplitData(
   if (!carClass) return;
 
   const tabType = getTabType();
-  if (tabType === 'other') return;
-
-  const rows =
-    tabType === 'quali'
-      ? getQualiRowsData(race, trackRecords, carClass)
-      : tabType === 'race'
-      ? getRaceRowsData(race, trackRecords, carClass)
-      : getEntryRowsData();
+  if (!tabType) return;
 
   return {
     selectedSplit: split,
-    rows,
+    rows: getRowsData(race, trackRecords, carClass, tabType),
     sor: getSplitSoF(race, split),
     carClasses: getCarClasses(),
     ownSplitElem: getOwnSplitTab(race, ownSplitIndex),
+    ownNameElem: getOwnNameElem(race, user?.id, tabType),
   };
 }
 
@@ -168,6 +167,19 @@ function getOwnSplitTab(
     ?.querySelectorAll('.mat-tab-label-content')[
     ownSplitIndex
   ] as HTMLDivElement;
+}
+
+function getOwnNameElem(
+  race: Race | undefined,
+  userId: number | undefined,
+  tabType: TabType | undefined
+): HTMLAnchorElement | undefined {
+  if (!race || !userId) return;
+  const href = `/profile/${userId}`;
+  const ownRow = getResultRows(tabType).find(
+    (row) => row.driverName?.querySelector('a')?.getAttribute('href') === href
+  );
+  return ownRow?.driverName?.querySelector('a') || undefined;
 }
 
 function getCarClasses(): CarClassData[] {
@@ -187,23 +199,17 @@ function getCarClasses(): CarClassData[] {
   }, [] as CarClassData[]);
 }
 
-function getQualiRowsData(
+function getRowsData(
   race: Race,
   trackRecords: TrackDataWithRecords,
-  carClass: CarClass
+  carClass: CarClass,
+  tab: TabType
 ): RowData[] {
-  const resultRows = Array.from(
-    document.querySelectorAll<HTMLTableRowElement>(
-      'elastic-qualifying-results-seasons tbody tr'
-    )
-  );
-  if (!resultRows) return [];
+  return getResultRows(tab).map((row) => {
+    const isEntryRow = isEntrylistResultRow(row);
 
-  return resultRows.map((row) => {
     const user: RowData['user'] = (() => {
-      const elem = row.children[
-        QualiResultsColumns.DRIVER_NAME
-      ] as HTMLTableCellElement;
+      const elem = row.driverName;
       if (!elem) return;
 
       const userId = Number(
@@ -216,57 +222,16 @@ function getQualiRowsData(
     if (!user) return {};
 
     const lapTime: RowData['lapTime'] = (() => {
-      const elem = row.children[
-        QualiResultsColumns.BEST_LAP
-      ] as HTMLTableCellElement;
-      const result = getQualiResultFromRaceData(race, user.userId);
-      const pctg = getPctgTime(carClass, trackRecords.records, result?.bestLap);
-
-      if (!elem || !pctg) return;
-      return { elem, pctg };
-    })();
-
-    return {
-      user,
-      lapTime,
-    };
-  });
-}
-
-function getRaceRowsData(
-  race: Race,
-  trackRecords: TrackDataWithRecords,
-  carClass: CarClass
-): RowData[] {
-  const resultRows = Array.from(
-    document.querySelectorAll<HTMLTableRowElement>(
-      'elastic-race-results-seasons tbody tr'
-    )
-  );
-  if (!resultRows) return [];
-
-  return resultRows.map((row, i) => {
-    const user: RowData['user'] = (() => {
-      const elem = row.children[
-        RaceResultsColumns.DRIVER_NAME
-      ] as HTMLTableCellElement;
-      if (!elem) return;
-
-      const userId = Number(
-        /(\d+)/.exec(elem.querySelector('a')?.getAttribute('href')!)?.[1]
+      if (isEntryRow) return;
+      const elem = row.bestLap;
+      const result = isQualiResultRow(row)
+        ? getQualiResultFromRaceData(race, user.userId)
+        : getRaceResultFromRaceData(race, user.userId);
+      const pctg = getPctgTime(
+        carClass,
+        trackRecords.records,
+        result?.bestLap!
       );
-      if (!userId) return;
-
-      return { elem, userId };
-    })();
-    if (!user) return {};
-
-    const lapTime: RowData['lapTime'] = (() => {
-      const elem = row.children[
-        RaceResultsColumns.BEST_LAP
-      ] as HTMLTableCellElement;
-      const result = getRaceResultFromRaceData(race, user.userId);
-      const pctg = getPctgTime(carClass, trackRecords.records, result?.bestlap);
 
       if (!elem || !pctg) return;
       return { elem, pctg };
@@ -279,8 +244,20 @@ function getRaceRowsData(
   });
 }
 
-function getEntryRowsData(): RowData[] {
-  return [];
+function getResultRows(tab: TabType | undefined): LfmResultRow[] {
+  if (!tab) return [];
+
+  const selector =
+    tab === 'raceQualiResult'
+      ? 'elastic-qualifying-results-seasons tbody tr'
+      : tab === 'raceResult'
+      ? 'elastic-race-results-seasons tbody tr'
+      : 'tbody tr';
+  const rows = selector
+    ? Array.from(document.querySelectorAll<HTMLTableRowElement>(selector))
+    : [];
+
+  return rows.map((tr) => createResultRow(tr, tab));
 }
 
 function getPctgTime(
@@ -300,15 +277,14 @@ function getPctgTime(
   return 100 * (timeMs / recordMs);
 }
 
-function getTabType(): TabType {
-  const elem = document.querySelector(
+function getTabType(): TabType | undefined {
+  const elemText = document.querySelector(
     'elastic-race-detail mat-tab-header [aria-selected="true"]'
-  );
-  if (!elem) return 'other';
-  if (/race results/i.test(elem.textContent!)) return 'race';
-  if (/qualifying results/i.test(elem.textContent!)) return 'quali';
-  if (/entrylist/i.test(elem.textContent!)) return 'entrylist';
-  return 'other';
+  )?.textContent;
+  if (!elemText) return;
+  if (/race results/i.test(elemText)) return 'raceResult';
+  if (/qualifying results/i.test(elemText)) return 'raceQualiResult';
+  if (/entrylist/i.test(elemText)) return 'raceEntryList';
 }
 
 function getCarClass(race: Race): CarClass | undefined {
