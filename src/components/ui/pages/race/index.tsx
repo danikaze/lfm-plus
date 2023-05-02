@@ -22,6 +22,14 @@ export const RacePage: FC<Props> = (props) => {
     );
   }, [settings, currentSplitData?.ownSplitElem]);
 
+  useEffect(() => {
+    if (!currentSplitData?.ownNameElem) return;
+    currentSplitData.ownNameElem.style.setProperty(
+      'color',
+      settings.ownNameColor
+    );
+  }, [settings, currentSplitData?.ownNameElem]);
+
   const elems = useMemo(() => {
     if (!currentSplitData) return;
 

@@ -392,7 +392,7 @@ export interface RaceResult {
   driverId: number;
   teamCarId: Team['teamId'];
   laps: number;
-  bestlap: LapTimeAsString;
+  bestLap: LapTimeAsString;
   time: RaceTimeAsString;
   timePenalty: number;
   dnf: BooleanAsNumber;

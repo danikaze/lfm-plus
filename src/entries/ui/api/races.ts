@@ -39,6 +39,7 @@ const convertOptions: TransformObjectOptions = {
     cargroup: 'carGroup',
     assistrules: 'assistRules',
     eventrules: 'eventRules',
+    bestlap: 'bestLap',
   },
   // transform the rest from snake_case to camelCase
   keyCase: { from: 'snake', to: 'camelAsIs' },
