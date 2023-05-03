@@ -4,7 +4,7 @@ import {
 } from '@utils/transform-object';
 import { msgError } from '@utils/logging';
 import { addXhrLoadHandler } from '@utils/xhr';
-import { setDataFromApi } from '@store/features/user-track-records';
+import { setUserTrackRecordsDataFromApi } from '@store/features/user-track-records';
 import { TrackDataWithRecordsOneClass } from '@store/types';
 import { AppDispatch } from '@store';
 import { CarClass } from '@utils/lfm';
@@ -21,7 +21,7 @@ export function interceptUserTrackRecordsApiData(dispatch: AppDispatch): void {
         if (!carClass) return;
 
         const tracks = transformApiData(apiData);
-        dispatch(setDataFromApi({ tracks, carClass }));
+        dispatch(setUserTrackRecordsDataFromApi({ tracks, carClass }));
       } catch (e) {
         msgError(e);
       }

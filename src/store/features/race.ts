@@ -14,13 +14,13 @@ export const racesSlice = createSlice({
   name: 'races',
   initialState,
   reducers: {
-    setDataFromApi: (state, action: PayloadAction<Race>) => {
+    setRacesDataFromApi: (state, action: PayloadAction<Race>) => {
       state.data[action.payload.raceId] = action.payload;
       state.updatedOn = new Date().toISOString();
     },
   },
 });
 
-export const { setDataFromApi } = racesSlice.actions;
+export const { setRacesDataFromApi } = racesSlice.actions;
 
 export const racesReducer = racesSlice.reducer;
