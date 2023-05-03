@@ -7,6 +7,7 @@ import { addXhrLoadHandler } from '@utils/xhr';
 import { setTrackRecordsDataFromApi } from '@store/features/tracks';
 import { TrackDataWithRecordsAllClasses } from '@store/types';
 import { AppDispatch } from '@store';
+import { storeTrackRecords } from '@utils/lfm/storage';
 
 export function interceptTrackApiData(dispatch: AppDispatch): void {
   addXhrLoadHandler(
@@ -15,6 +16,7 @@ export function interceptTrackApiData(dispatch: AppDispatch): void {
         const apiData = JSON.parse(xhr.body);
         const data = transformApiData(apiData);
         dispatch(setTrackRecordsDataFromApi(data));
+        storeTrackRecords(data);
       } catch (e) {
         msgError(e);
       }
