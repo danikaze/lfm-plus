@@ -65,11 +65,11 @@ export interface TrackData {
   simSettings: string;
 }
 
-export interface TrackDataWithRecords extends TrackData {
+export interface TrackDataWithRecordsAllClasses extends TrackData {
   records: Partial<Record<CarClass, TrackRecord>>;
 }
 
-export interface TrackDataWithClassRecords extends TrackData {
+export interface TrackDataWithRecordsOneClass extends TrackData {
   records: TrackRecord;
 }
 

@@ -3,12 +3,14 @@ import { useSelector } from 'react-redux';
 import { throttle } from 'throttle-debounce';
 
 import { tracksSelector, userTrackRecordsSelector } from '@store/selectors';
-import { TrackDataWithClassRecords, TrackDataWithRecords } from '@store/types';
+import {
+  TrackDataWithRecordsOneClass,
+  TrackDataWithRecordsAllClasses,
+} from '@store/types';
 import { CarClass, SimId, SimNames } from '@utils/lfm';
 import { msgLog } from '@utils/logging';
 import { findTrack } from '@utils/lfm/find-track';
 import { timeToMs } from '@utils/time';
-import { getAncestor } from '@utils/get-ancestor';
 import { MUTATION_OBSERVER_THROTTLE } from '@utils/constants';
 
 interface RowData {
@@ -17,7 +19,7 @@ interface RowData {
     qualiTime: HTMLTableCellElement;
     raceTime: HTMLTableCellElement;
   };
-  track: TrackDataWithRecords;
+  track: TrackDataWithRecordsAllClasses;
   carClass: CarClass;
   qualiPctg?: number;
   racePctg?: number;
@@ -51,9 +53,9 @@ export function useProfilePage() {
 }
 
 function selectTrackElems(
-  allTrackRecords: TrackDataWithRecords[] | undefined,
+  allTrackRecords: TrackDataWithRecordsAllClasses[] | undefined,
   userRecords:
-    | Partial<Record<CarClass, TrackDataWithClassRecords[]>>
+    | Partial<Record<CarClass, TrackDataWithRecordsOneClass[]>>
     | undefined
 ): RowData[] | undefined {
   if (!allTrackRecords || !userRecords) return;
@@ -141,8 +143,8 @@ function selectCarClass(): CarClass | undefined {
 }
 
 function getPctgTime(
-  globalRecords: TrackDataWithRecords['records'],
-  userRecords: TrackDataWithClassRecords['records'] | undefined,
+  globalRecords: TrackDataWithRecordsAllClasses['records'],
+  userRecords: TrackDataWithRecordsOneClass['records'] | undefined,
   carClass: CarClass
 ): Record<'qualiPctg' | 'racePctg', number> | undefined {
   if (

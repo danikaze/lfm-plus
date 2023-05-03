@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { TrackDataWithRecords } from '@store/types';
+import { TrackDataWithRecordsAllClasses } from '@store/types';
 
 interface TracksState {
   updatedOn?: string;
-  data: TrackDataWithRecords[];
+  data: TrackDataWithRecordsAllClasses[];
 }
 
 const initialState: TracksState = {
@@ -14,7 +14,10 @@ export const tracksSlice = createSlice({
   name: 'trackRecords',
   initialState,
   reducers: {
-    setDataFromApi: (state, action: PayloadAction<TrackDataWithRecords[]>) => {
+    setDataFromApi: (
+      state,
+      action: PayloadAction<TrackDataWithRecordsAllClasses[]>
+    ) => {
       for (const track of action.payload) {
         const index = state.data.findIndex(
           ({ simId, trackId }) =>

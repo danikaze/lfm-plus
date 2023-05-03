@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react';
 import { clsx } from 'clsx';
 
-import { TrackDataWithRecords } from '@store/types';
+import { TrackDataWithRecordsAllClasses } from '@store/types';
 import { CarClass } from '@utils/lfm';
 import { Portal } from '@components/portal';
 
@@ -11,7 +11,7 @@ import { Position } from '@components/position';
 import { getPctgColor } from '@utils/get-pctg-color';
 
 export interface Props {
-  track: TrackDataWithRecords;
+  track: TrackDataWithRecordsAllClasses;
   carClass: CarClass;
   style: 'trackRecords' | 'profileBests' | 'raceResultClass';
 }

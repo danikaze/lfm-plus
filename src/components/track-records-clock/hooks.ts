@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 
-import { TrackDataWithRecords } from '@store/types';
+import { TrackDataWithRecordsAllClasses } from '@store/types';
 import { CarClass } from '@utils/lfm';
 import { msToTime, timeToMs } from '@utils/time';
 import { MAX_TIMES_PCTG } from '@utils/constants';
@@ -43,7 +43,7 @@ export function useTrackRecordsClock({
 }
 
 function calculateTimes(
-  records: TrackDataWithRecords['records'],
+  records: TrackDataWithRecordsAllClasses['records'],
   carClass: CarClass
 ): Times[] | undefined {
   const classRecords = records?.[carClass];
