@@ -6,7 +6,7 @@ import {
   useRaceSelector,
   userSelector,
 } from '@store/selectors';
-import { Race, TrackDataWithRecords, User } from '@store/types';
+import { Race, TrackDataWithRecordsAllClasses, User } from '@store/types';
 import { CarClass } from '@utils/lfm';
 import { timeToMs } from '@utils/time';
 import { useTrackSelector } from '@store/selectors';
@@ -130,7 +130,7 @@ function getSplit(): number | undefined {
 }
 
 function getSplitData(
-  trackRecords: TrackDataWithRecords | undefined,
+  trackRecords: TrackDataWithRecordsAllClasses | undefined,
   race: Race | undefined,
   ownSplitIndex: number | undefined,
   user: User | undefined
@@ -201,7 +201,7 @@ function getCarClasses(): CarClassData[] {
 
 function getRowsData(
   race: Race,
-  trackRecords: TrackDataWithRecords,
+  trackRecords: TrackDataWithRecordsAllClasses,
   carClass: CarClass,
   tab: TabType
 ): RowData[] {
@@ -262,7 +262,7 @@ function getResultRows(tab: TabType | undefined): LfmResultRow[] {
 
 function getPctgTime(
   carClass: CarClass,
-  trackRecords: TrackDataWithRecords['records'] | undefined,
+  trackRecords: TrackDataWithRecordsAllClasses['records'] | undefined,
   time: string | undefined
 ): number | undefined {
   if (!trackRecords || !time) return;

@@ -1,15 +1,15 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { TrackDataWithClassRecords } from '@store/types';
+import { TrackDataWithRecordsOneClass } from '@store/types';
 import { CarClass } from '@utils/lfm';
 
 interface TracksState {
   updatedOn?: string;
-  data: Partial<Record<CarClass, TrackDataWithClassRecords[]>>;
+  data: Partial<Record<CarClass, TrackDataWithRecordsOneClass[]>>;
 }
 
 interface PayloadData {
   carClass: CarClass;
-  tracks: TrackDataWithClassRecords[];
+  tracks: TrackDataWithRecordsOneClass[];
 }
 
 const initialState: TracksState = {

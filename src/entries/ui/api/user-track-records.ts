@@ -5,7 +5,7 @@ import {
 import { msgError } from '@utils/logging';
 import { addXhrLoadHandler } from '@utils/xhr';
 import { setDataFromApi } from '@store/features/user-track-records';
-import { TrackDataWithClassRecords } from '@store/types';
+import { TrackDataWithRecordsOneClass } from '@store/types';
 import { AppDispatch } from '@store';
 import { CarClass } from '@utils/lfm';
 
@@ -35,9 +35,10 @@ export function interceptUserTrackRecordsApiData(dispatch: AppDispatch): void {
   );
 }
 
-function transformApiData(apiData: any[]): TrackDataWithClassRecords[] {
+function transformApiData(apiData: any[]): TrackDataWithRecordsOneClass[] {
   return apiData.map(
-    (item) => transformObject(item, convertOptions) as TrackDataWithClassRecords
+    (item) =>
+      transformObject(item, convertOptions) as TrackDataWithRecordsOneClass
   );
 }
 

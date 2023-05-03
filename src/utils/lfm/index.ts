@@ -52,5 +52,6 @@ export const enum QualifyingFormat {
 }
 
 export const enum IncidentType {
-  COLLISION = 'C', // maybe COLLISION?
+  C = 'C', // 1x: Track limits / Lap without giving position back???
+  D = 'D', // 4x: Collisions
 }
