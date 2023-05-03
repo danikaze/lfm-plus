@@ -6,7 +6,7 @@ import { msgError } from '@utils/logging';
 import { addXhrLoadHandler } from '@utils/xhr';
 import { Race } from '@store/types';
 import { AppDispatch } from '@store';
-import { setDataFromApi } from '@store/features/race';
+import { setRacesDataFromApi } from '@store/features/race';
 
 export function interceptRacesApiData(dispatch: AppDispatch): void {
   addXhrLoadHandler(
@@ -14,7 +14,7 @@ export function interceptRacesApiData(dispatch: AppDispatch): void {
       try {
         const apiData = JSON.parse(xhr.body);
         const data = transformObject(apiData, convertOptions) as Race;
-        dispatch(setDataFromApi(data));
+        dispatch(setRacesDataFromApi(data));
       } catch (e) {
         msgError(e);
       }

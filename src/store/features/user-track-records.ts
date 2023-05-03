@@ -20,7 +20,10 @@ export const userTrackRecordsSlice = createSlice({
   name: 'userTrackRecords',
   initialState,
   reducers: {
-    setDataFromApi: (state, action: PayloadAction<PayloadData>) => {
+    setUserTrackRecordsDataFromApi: (
+      state,
+      action: PayloadAction<PayloadData>
+    ) => {
       const { carClass, tracks } = action.payload;
       if (!state.data[carClass]) {
         state.data[carClass] = [];
@@ -43,6 +46,6 @@ export const userTrackRecordsSlice = createSlice({
   },
 });
 
-export const { setDataFromApi } = userTrackRecordsSlice.actions;
+export const { setUserTrackRecordsDataFromApi } = userTrackRecordsSlice.actions;
 
 export const userTrackRecordsReducer = userTrackRecordsSlice.reducer;

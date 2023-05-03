@@ -14,7 +14,7 @@ export const tracksSlice = createSlice({
   name: 'trackRecords',
   initialState,
   reducers: {
-    setDataFromApi: (
+    setTrackRecordsDataFromApi: (
       state,
       action: PayloadAction<TrackDataWithRecordsAllClasses[]>
     ) => {
@@ -34,6 +34,6 @@ export const tracksSlice = createSlice({
   },
 });
 
-export const { setDataFromApi } = tracksSlice.actions;
+export const { setTrackRecordsDataFromApi } = tracksSlice.actions;
 
 export const tracksReducer = tracksSlice.reducer;

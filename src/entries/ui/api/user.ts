@@ -6,7 +6,7 @@ import { msgError } from '@utils/logging';
 import { addXhrLoadHandler } from '@utils/xhr';
 import { User } from '@store/types';
 import { AppDispatch } from '@store';
-import { setDataFromApi } from '@store/features/user';
+import { setUserDataFromApi } from '@store/features/user';
 
 export function interceptUserApiData(dispatch: AppDispatch): void {
   addXhrLoadHandler(
@@ -14,7 +14,7 @@ export function interceptUserApiData(dispatch: AppDispatch): void {
       try {
         const apiData = JSON.parse(xhr.body);
         const data = transformObject(apiData, convertOptions) as User;
-        dispatch(setDataFromApi(data));
+        dispatch(setUserDataFromApi(data));
       } catch (e) {
         msgError(e);
       }
