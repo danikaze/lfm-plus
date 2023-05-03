@@ -18,6 +18,16 @@ trackUrlChanges(store.dispatch);
 const container = document.createElement('div');
 container.id = 'lfm-plus-root';
 document.body.appendChild(container);
+// const container = (() => {
+//   const ID = 'lfm-plus-root';
+//   let container = document.getElementById(ID);
+//   if (container) return container;
+
+//   container = document.createElement('div');
+//   container.id = ID;
+//   document.body.appendChild(container);
+//   return container;
+// })();
 
 const root = createRoot(container);
 const app = (

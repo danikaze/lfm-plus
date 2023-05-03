@@ -1,24 +1,21 @@
 import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
-import {
-  currentPageSelector,
-  isTrackDataUpToDateSelector,
-} from '@store/selectors';
-import { updateTrackInfo } from '@utils/lfm/api/tracks';
+import { currentPageSelector } from '@store/selectors';
 import { PopupMenuItem } from '@components/popup-menu';
 import { PageState } from '@store/features/page';
 import { msgLog } from '@utils/logging';
+import { loadTrackRecords } from '@utils/lfm/storage';
 
 export function useLfmPlusUi() {
-  const isTrackDataUpdated = useSelector(isTrackDataUpToDateSelector);
   const currentPage = useSelector(currentPageSelector);
 
-  /* Update the track data automatically when needed */
+  /*
+   * Load cache data into the Store state
+   */
   useEffect(() => {
-    if (isTrackDataUpdated) return;
-    updateTrackInfo();
-  }, [isTrackDataUpdated]);
+    loadTrackRecords();
+  }, []);
 
   const topMenuItems = useMemo(
     () => getTopMenuItems(currentPage),
