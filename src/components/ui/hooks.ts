@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { currentPageSelector } from '@store/selectors';
 import { PopupMenuItem } from '@components/popup-menu';
@@ -14,7 +14,7 @@ export function useLfmPlusUi() {
    * Load cache data into the Store state
    */
   useEffect(() => {
-    loadTrackRecords();
+    loadTrackRecords(dispatch);
   }, []);
 
   const topMenuItems = useMemo(
