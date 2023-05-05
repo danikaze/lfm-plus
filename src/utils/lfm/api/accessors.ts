@@ -44,6 +44,14 @@ export function getRaceResultFromRaceData(
   }
 }
 
+export function getSplitSoF(race: Race, split: number): number | undefined {
+  if (!race) return;
+  if (split === 1) {
+    return race.sof;
+  }
+  return race[`split${split}Sof` as 'split1Sof'];
+}
+
 function findQualiResult(
   qualiResultsSplits: QualiResult[],
   userId: User['id']

@@ -7,9 +7,8 @@ import {
   userSelector,
 } from '@store/selectors';
 import { Race, TrackDataWithRecordsAllClasses, User } from '@store/types';
-import { CarClass } from '@utils/lfm';
-import { timeToMs } from '@utils/time';
 import { useTrackSelector } from '@store/selectors';
+import { CarClass } from '@utils/lfm';
 import {
   LfmResultRow,
   ResultRowOrigin,
@@ -21,7 +20,9 @@ import {
   getOwnUserSplitFromRaceData,
   getQualiResultFromRaceData,
   getRaceResultFromRaceData,
-} from '@utils/lfm/api/selectors';
+  getSplitSoF,
+} from '@utils/lfm/api/accessors';
+import { getPctgTime } from '@utils/lfm/get-time-pctg';
 import { POLL_INTERVAL_MS } from '@utils/constants';
 
 import { Props } from '.';
@@ -260,23 +261,6 @@ function getResultRows(tab: TabType | undefined): LfmResultRow[] {
   return rows.map((tr) => createResultRow(tr, tab));
 }
 
-function getPctgTime(
-  carClass: CarClass,
-  trackRecords: TrackDataWithRecordsAllClasses['records'] | undefined,
-  time: string | undefined
-): number | undefined {
-  if (!trackRecords || !time) return;
-  const record = trackRecords[carClass];
-  if (!record || Array.isArray(record.qualifying)) return;
-
-  const recordMs = timeToMs(record.qualifying.lap);
-  const timeMs = timeToMs(time);
-
-  if (!recordMs || !timeMs) return;
-
-  return 100 * (timeMs / recordMs);
-}
-
 function getTabType(): TabType | undefined {
   const elemText = document.querySelector(
     'elastic-race-detail mat-tab-header [aria-selected="true"]'
@@ -291,12 +275,4 @@ function getCarClass(race: Race): CarClass | undefined {
   try {
     return race.serverSettings.serverSettings.settings.data.carGroup;
   } catch {}
-}
-
-function getSplitSoF(race: Race, split: number): number | undefined {
-  if (!race) return;
-  if (split === 1) {
-    return race.sof;
-  }
-  return race[`split${split}Sof` as 'split1Sof'];
 }
