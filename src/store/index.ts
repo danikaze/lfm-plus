@@ -6,6 +6,7 @@ import { userTrackRecordsReducer } from './features/user-track-records';
 import { racesReducer } from './features/race';
 import { settingsReducer } from './features/settings';
 import { userReducer } from './features/user';
+import { snackbarReducer } from './features/snackbar';
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     tracks: tracksReducer,
     userTrackRecords: userTrackRecordsReducer,
     races: racesReducer,
+    snackbar: snackbarReducer,
   },
 });
 

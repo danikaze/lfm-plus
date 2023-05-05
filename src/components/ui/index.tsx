@@ -2,11 +2,12 @@ import { FC, useCallback, useMemo } from 'react';
 
 import { WaitingPortal } from '@components/portal/waiting-portal';
 import { TopBarButton } from '@components/top-bar-button';
+import { Snackbar } from '@components/snackbar';
 import { useLfmPlusUi } from './hooks';
 import { LfmPlusPage } from './pages';
 
 export const LfmPlusUi: FC = () => {
-  const { currentPage, topMenuItems } = useLfmPlusUi();
+  const { snackbar, currentPage, topMenuItems } = useLfmPlusUi();
 
   const waitForContainer = useCallback(
     () => document.querySelector<HTMLElement>('elastic-toolbar-user-button'),
@@ -22,6 +23,7 @@ export const LfmPlusUi: FC = () => {
 
   return (
     <>
+      {snackbar && <Snackbar {...snackbar} />}
       <WaitingPortal
         waitForContainer={waitForContainer}
         waitForOptions={waitForOptions}

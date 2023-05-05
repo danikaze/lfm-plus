@@ -21,5 +21,7 @@ export const useTrackSelector = (filter: FindTrackFilter | undefined) =>
 export const userTrackRecordsSelector = (state: RootState) =>
   state.userTrackRecords;
 
-export const useRaceSelector = (raceId: Race['raceId']) =>
-  useCallback((state: RootState) => state.races.data[raceId], [raceId]);
+export const useRaceSelector = (raceId: Race['raceId'] | undefined) =>
+  useCallback((state: RootState) => state.races.data[raceId!], [raceId]);
+
+export const snackBarSelector = (state: RootState) => state.snackbar[0];
